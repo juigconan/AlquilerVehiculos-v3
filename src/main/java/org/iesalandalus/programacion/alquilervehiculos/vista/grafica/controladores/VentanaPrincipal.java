@@ -2,6 +2,8 @@ package org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controlado
 
 import java.time.LocalDate;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Alquiler;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Autobus;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Cliente;
@@ -11,7 +13,9 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.recursos.LocalizadorRecursos;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controlador;
+import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controladores;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controles.FormateadorCeldaFecha;
+import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Dialogos;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -239,6 +243,38 @@ public class VentanaPrincipal extends Controlador {
 	}
 
 	@FXML
+	void insertarCliente(ActionEvent event) {
+
+		InsertarCliente insertarCliente = (InsertarCliente) Controladores.get("vistas/InsertarCliente.fxml",
+				"Insertar cliente", getEscenario());
+		insertarCliente.getEscenario().setResizable(false);
+		insertarCliente.getEscenario().showAndWait();
+		iniciarTablas();
+
+	}
+
+	@FXML
+	void buscarCliente(ActionEvent event) {
+
+	}
+
+	@FXML
+	void borrarCliente(ActionEvent event) {
+		Cliente cliente = tvClientes.getSelectionModel().getSelectedItem();
+		try {
+			if (cliente == null) {
+				Dialogos.mostrarDialogoAdvertencia("Cuidado", "No ha seleccionado ningún cliente.", getEscenario());
+			} else if (Dialogos.mostrarDialogoConfirmacion("Borrar",
+					String.format("¿Seguro que desea borrar a %s - %s?", cliente.getNombre(), cliente.getDni()),
+					getEscenario())) {
+				vista.getControlador().borrarCliente(cliente);
+				iniciarTablas();
+			}
+		} catch (OperationNotSupportedException e) {
+		}
+	}
+
+	@FXML
 	void abrirAcercaDe(ActionEvent event) {
 
 	}
@@ -254,22 +290,12 @@ public class VentanaPrincipal extends Controlador {
 	}
 
 	@FXML
-	void borrarCliente(ActionEvent event) {
-
-	}
-
-	@FXML
 	void borrarVehiculo(ActionEvent event) {
 
 	}
 
 	@FXML
 	void buscarAlquiler(ActionEvent event) {
-
-	}
-
-	@FXML
-	void buscarCliente(ActionEvent event) {
 
 	}
 
@@ -285,11 +311,6 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void insertarAlquiler(ActionEvent event) {
-
-	}
-
-	@FXML
-	void insertarCliente(ActionEvent event) {
 
 	}
 
