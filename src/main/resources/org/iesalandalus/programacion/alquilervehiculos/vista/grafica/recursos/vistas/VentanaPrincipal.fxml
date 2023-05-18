@@ -12,32 +12,31 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controladores.VentanaPrincipal">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" stylesheets="@../estilos/estiloPrincipal.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controladores.VentanaPrincipal">
    <children>
       <MenuBar fx:id="mbMenu">
         <menus>
-            <Menu fx:id="mInsertar" mnemonicParsing="false" onAction="#abrirAyuda" text="Insertar">
+            <Menu fx:id="mInsertar" mnemonicParsing="false" text="Insertar">
                <items>
                   <MenuItem fx:id="miInsertarClienteMenu" mnemonicParsing="false" onAction="#insertarCliente" text="Cliente" />
                   <MenuItem fx:id="miInsertarVehiculoMenu" mnemonicParsing="false" onAction="#insertarVehiculo" text="Vehiculo" />
                   <MenuItem fx:id="miInsertarAlquiler" mnemonicParsing="false" onAction="#insertarAlquiler" text="Alquiler" />
                </items>
             </Menu>
-            <Menu fx:id="mAyuda11" mnemonicParsing="false" onAction="#abrirAyuda" text="Borrar">
+            <Menu fx:id="mBorrar" mnemonicParsing="false" text="Borrar">
                <items>
-                  <MenuItem fx:id="miBorrarClienteMenu" mnemonicParsing="false" onAction="#borrarCliente" text="Cliente" />
-                  <MenuItem fx:id="miBorrarVehiculoMenu" mnemonicParsing="false" onAction="#borrarVehiculo" text="Vehiculo" />
-                  <MenuItem fx:id="miBorrarAlquilerMune" mnemonicParsing="false" onAction="#borrarAlquiler" text="Alquiler" />
-               </items>
-            </Menu>
-            <Menu fx:id="mAyuda111" mnemonicParsing="false" onAction="#abrirAyuda" text="Buscar">
+                  <MenuItem fx:id="miBorrarClienteMenu" mnemonicParsing="false" onAction="#borrarClienteMenu" text="Cliente" />
+                  <MenuItem fx:id="miBorrarVehiculoMenu" mnemonicParsing="false" onAction="#borrarVehiculoMenu" text="Vehiculo" />
+                  <MenuItem fx:id="miBorrarAlquilerMenu" mnemonicParsing="false" onAction="#borrarAlquilerMenu" text="Alquiler" />
+               </items></Menu>
+            <Menu fx:id="mBuscar" mnemonicParsing="false" text="Buscar">
                <items>
                   <MenuItem fx:id="miBuscarClienteMenu" mnemonicParsing="false" onAction="#buscarCliente" text="Cliente" />
                   <MenuItem fx:id="miBuscarVehiculoMenu" mnemonicParsing="false" onAction="#buscarVehiculo" text="Vehiculo" />
                   <MenuItem fx:id="miBuscarAlquilerMenu" mnemonicParsing="false" onAction="#buscarAlquiler" text="Alquiler" />
                </items>
             </Menu>
-          <Menu fx:id="mAyuda" mnemonicParsing="false" onAction="#abrirAyuda" text="Ayuda" />
+          <Menu fx:id="mEstadisticas" mnemonicParsing="false" onAction="#mostrarEstadisticas" text="Estadisticas" />
           <Menu fx:id="mAcercaDe" mnemonicParsing="false" onAction="#abrirAcercaDe" text="Acerca de..." />
         </menus>
       </MenuBar>
@@ -59,7 +58,7 @@
                                   <MenuItem fx:id="miInsertarCliente" mnemonicParsing="false" onAction="#insertarCliente" text="Insertar cliente" />
                                     <MenuItem fx:id="miModificarCliente" mnemonicParsing="false" onAction="#modificarCliente" text="Modificar cliente" />
                                     <MenuItem mnemonicParsing="false" onAction="#buscarCliente" text="Buscar cliente" />
-                                    <MenuItem fx:id="miBorrarCliente" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar cliente" />
+                                    <MenuItem fx:id="miBorrarCliente" disable="true" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar cliente" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -89,7 +88,7 @@
                                 <items>
                                   <MenuItem fx:id="miInsertarVehiculo" mnemonicParsing="false" onAction="#insertarVehiculo" text="Insertar vehiculo" />
                                     <MenuItem fx:id="miBuscarVehiculo" mnemonicParsing="false" onAction="#buscarVehiculo" text="Buscar vehiculo" />
-                                    <MenuItem fx:id="miBorrarVehiculo" mnemonicParsing="false" onAction="#borrarVehiculo" text="Borrar vehiculo" />
+                                    <MenuItem fx:id="miBorrarVehiculo" disable="true" mnemonicParsing="false" onAction="#borrarVehiculo" text="Borrar vehiculo" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
@@ -119,9 +118,10 @@
                               <ContextMenu>
                                 <items>
                                   <MenuItem fx:id="miInsertarAlquiler" mnemonicParsing="false" onAction="#insertarAlquiler" text="Insertar alquiler" />
+                                    <MenuItem fx:id="miDevolverAlquiler" disable="true" mnemonicParsing="false" onAction="#devolverAlquiler" text="Devolver alquiler" />
                                     <MenuItem fx:id="miDevolverAlquiler" mnemonicParsing="false" onAction="#devolverAlquiler" text="Borrar alquiler" />
                                     <MenuItem fx:id="miBuscarAlquiler" mnemonicParsing="false" onAction="#buscarAlquiler" text="Buscar alquiler" />
-                                    <MenuItem fx:id="miBorrarAlquiler" mnemonicParsing="false" onAction="#borrarAlquiler" text="Borrar alquiler" />
+                                    <MenuItem fx:id="miBorrarAlquiler" disable="true" mnemonicParsing="false" onAction="#borrarAlquiler" text="Borrar alquiler" />
                                 </items>
                               </ContextMenu>
                            </contextMenu>
