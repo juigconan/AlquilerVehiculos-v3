@@ -20,7 +20,8 @@ public class Controladores {
 	}
 
 	public static Controlador get(String vistaFxml, String titulo, Stage propietario) {
-		return controladoresCreados.containsKey(vistaFxml) ? controladoresCreados.get(vistaFxml) : crear(vistaFxml, titulo, propietario);
+		return controladoresCreados.containsKey(vistaFxml) ? controladoresCreados.get(vistaFxml)
+				: crear(vistaFxml, titulo, propietario);
 	}
 
 	private static Controlador crear(String vistaFxml, String titulo, Stage propietario) {

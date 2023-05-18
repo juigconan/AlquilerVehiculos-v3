@@ -36,7 +36,8 @@ public class InsertarCliente extends Controlador {
 
 	@FXML
 	void initialize() {
-		Controles.limpiarCamposTexto(tfNombre, tfDni,tfTelefono);
+		// Este limpiar esta aqui para que direcatamente aparezca el campo en rojo
+		Controles.limpiarCamposTexto(tfNombre, tfDni, tfTelefono);
 		tfNombre.textProperty().addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_NOMBRE, tfNombre));
 		tfDni.textProperty().addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_DNI, tfDni));
 		tfTelefono.textProperty()
@@ -56,17 +57,17 @@ public class InsertarCliente extends Controlador {
 			vista.getControlador()
 					.insertarCliente(new Cliente(tfNombre.getText(), tfDni.getText(), tfTelefono.getText()));
 			Dialogos.mostrarDialogoInformacion("EXITO", "Cliente insertado correctamente", getEscenario());
-			
+
 			cancelar(event);
 		} catch (IllegalArgumentException | NullPointerException | OperationNotSupportedException e) {
-			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
+			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());
 		}
 
 	}
 
 	@FXML
 	void cancelar(ActionEvent event) {
-		Controles.limpiarCamposTexto(tfNombre, tfDni,tfTelefono);
+		Controles.limpiarCamposTexto(tfNombre, tfDni, tfTelefono);
 		getEscenario().close();
 	}
 

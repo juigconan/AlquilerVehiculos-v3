@@ -1,5 +1,6 @@
 package org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controladores;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 import javax.naming.OperationNotSupportedException;
@@ -21,6 +22,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,8 +32,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class VentanaPrincipal extends Controlador {
 
@@ -175,30 +179,25 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void initialize() {
-		iniciarTablas();
-		iniciarImagenes();
+		refrescarTablas();
 		actualizarMenus();
 	}
 
 	private void actualizarMenus() {
 		tvClientes.getSelectionModel().selectedItemProperty()
 				.addListener((ob, ov, nv) -> miBorrarCliente.setDisable(nv == null));
+		tvClientes.getSelectionModel().selectedItemProperty()
+				.addListener((ob, ov, nv) -> miModificarCliente.setDisable(nv == null));
 		tvAlquileres.getSelectionModel().selectedItemProperty()
 				.addListener((ob, ov, nv) -> miBorrarAlquiler.setDisable(nv == null));
 		tvVehiculos.getSelectionModel().selectedItemProperty()
 				.addListener((ob, ov, nv) -> miBorrarVehiculo.setDisable(nv == null));
 	}
 
-	private void iniciarImagenes() {
-		ivAlquileres
-				.setImage(new Image(LocalizadorRecursos.class.getResourceAsStream("imagenes/imagenAlquileres.png")));
-		ivClientes.setImage(new Image(LocalizadorRecursos.class.getResourceAsStream("imagenes/imagenClientes.png")));
-		ivVehiculos.setImage(new Image(LocalizadorRecursos.class.getResourceAsStream("imagenes/imagenVehiculos.png")));
-	}
-
-	private void iniciarTablas() {
+	private void refrescarTablas() {
 		// Tabla de clientes
 		tvClientes.getSelectionModel().clearSelection();
+		tvClientes.getItems().clear();
 		tcNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		tcDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
 		tcTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
@@ -206,6 +205,7 @@ public class VentanaPrincipal extends Controlador {
 
 		// Tabla de vehiculos
 		tvVehiculos.getSelectionModel().clearSelection();
+		tvVehiculos.getItems().clear();
 		tcMarca.setCellValueFactory(new PropertyValueFactory<>("marca"));
 		tcModelo.setCellValueFactory(new PropertyValueFactory<>("modelo"));
 		tcMatricula.setCellValueFactory(new PropertyValueFactory<>("matricula"));
@@ -216,6 +216,7 @@ public class VentanaPrincipal extends Controlador {
 
 		// Tabla de alquileres
 		tvAlquileres.getSelectionModel().clearSelection();
+		tvAlquileres.getItems().clear();
 		tcCliente.setCellValueFactory(fila -> new SimpleObjectProperty<String>(fila.getValue().getCliente().getDni()));
 		tcVehiculo.setCellValueFactory(
 				fila -> new SimpleObjectProperty<String>(fila.getValue().getVehiculo().getMatricula()));
@@ -226,7 +227,7 @@ public class VentanaPrincipal extends Controlador {
 		tvAlquileres.setItems(FXCollections.observableList(vista.getControlador().getAlquileres()));
 	}
 
-	private String calcularPma(Vehiculo vehiculo) {
+	protected static String calcularPma(Vehiculo vehiculo) {
 		String pma = "--";
 		if (vehiculo instanceof Furgoneta furgoneta) {
 			pma = Integer.toString(furgoneta.getPma());
@@ -234,7 +235,7 @@ public class VentanaPrincipal extends Controlador {
 		return pma;
 	}
 
-	private String calcularPlazas(Vehiculo vehiculo) {
+	protected static String calcularPlazas(Vehiculo vehiculo) {
 		String plazas = "--";
 		if (vehiculo instanceof Furgoneta furgoneta) {
 			plazas = Integer.toString(furgoneta.getPlazas());
@@ -245,7 +246,7 @@ public class VentanaPrincipal extends Controlador {
 		return plazas;
 	}
 
-	private String calcularCilindrada(Vehiculo vehiculo) {
+	protected static String calcularCilindrada(Vehiculo vehiculo) {
 		String cilindrada = "--";
 		if (vehiculo instanceof Turismo turismo) {
 			cilindrada = Integer.toString(turismo.getCilindrada());
@@ -259,13 +260,17 @@ public class VentanaPrincipal extends Controlador {
 				"Borrar cliente", getEscenario());
 		insertarCliente.getEscenario().setResizable(false);
 		insertarCliente.getEscenario().showAndWait();
-		iniciarTablas();
+		refrescarTablas();
 
 	}
 
 	@FXML
 	void buscarCliente(ActionEvent event) {
-		tvClientes.getSelectionModel().clearSelection();
+		BuscarCliente buscarCliente = (BuscarCliente) Controladores.get("vistas/BuscarCliente.fxml", "Buscar cliente",
+				getEscenario());
+		buscarCliente.getEscenario().setResizable(false);
+		buscarCliente.getEscenario().showAndWait();
+		refrescarTablas();
 	}
 
 	@FXML
@@ -276,7 +281,7 @@ public class VentanaPrincipal extends Controlador {
 					String.format("¿Seguro que desea borrar a %s - %s?", cliente.getNombre(), cliente.getDni()),
 					getEscenario())) {
 				vista.getControlador().borrarCliente(cliente);
-				iniciarTablas();
+				refrescarTablas();
 			}
 		} catch (OperationNotSupportedException e) {
 			e.getStackTrace();
@@ -285,25 +290,93 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void borrarClienteMenu(ActionEvent event) {
-		BorrarCliente borrarCliente = (BorrarCliente) Controladores.get("vistas/BorrarCliente.fxml",
-				"Borrar cliente", getEscenario());
+		BorrarCliente borrarCliente = (BorrarCliente) Controladores.get("vistas/BorrarCliente.fxml", "Borrar cliente",
+				getEscenario());
 		borrarCliente.getEscenario().setResizable(false);
 		borrarCliente.getEscenario().showAndWait();
-		iniciarTablas();
+		refrescarTablas();
 	}
 
 	@FXML
 	void modificarCliente(ActionEvent event) {
-//		ModificarCliente borrarCliente = (ModificarCliente) Controladores.get("vistas/ModificarCliente.fxml",
-//				"Borrar cliente", getEscenario());
-//		borrarCliente.getEscenario().setResizable(false);
-//		borrarCliente.getEscenario().showAndWait();
-//		iniciarTablas();
+		// Creo la escena manualmente para poder coger el controlador
+		FXMLLoader loaderModificarCliente = new FXMLLoader(
+				LocalizadorRecursos.class.getResource("vistas/ModificarCliente.fxml"));
+		Cliente cliente = tvClientes.getSelectionModel().getSelectedItem();
+		try {
+			Parent raiz = loaderModificarCliente.load();
+			ModificarCliente modificarCliente = loaderModificarCliente.getController();
+			modificarCliente.cargarDatos(cliente.getNombre(), cliente.getDni(), cliente.getTelefono());
+			Stage escena = new Stage();
+			escena.setTitle("Modificar cliente");
+			escena.setScene(new Scene(raiz));
+			modificarCliente.setEscenario(escena);
+			escena.setResizable(false);
+			escena.showAndWait();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		refrescarTablas();
 	}
 
 	@FXML
-	void abrirAcercaDe(ActionEvent event) {
+	void insertarVehiculo(ActionEvent event) {
 
+		InsertarVehiculo insertarVehiculo = (InsertarVehiculo) Controladores.get("vistas/InsertarVehiculo.fxml",
+				"Insertar vehiculo", getEscenario());
+		insertarVehiculo.getEscenario().setResizable(false);
+		insertarVehiculo.getEscenario().showAndWait();
+		refrescarTablas();
+
+	}
+
+	@FXML
+	void borrarVehiculo(ActionEvent event) {
+		Vehiculo vehiculo = tvVehiculos.getSelectionModel().getSelectedItem();
+		try {
+			if (Dialogos.mostrarDialogoConfirmacion("Borrar",
+					String.format("¿Seguro que desea borrar el vehiculo con modelo %s, matricula %s?",
+							vehiculo.getModelo(), vehiculo.getMatricula()),
+					getEscenario())) {
+				vista.getControlador().borrarVehiculo(vehiculo);
+				refrescarTablas();
+			}
+		} catch (OperationNotSupportedException e) {
+			e.getStackTrace();
+		}
+	}
+
+	@FXML
+	void borrarVehiculoMenu(ActionEvent event) {
+		BorrarVehiculo borrarVehiculo = (BorrarVehiculo) Controladores.get("vistas/BorrarVehiculo.fxml",
+				"Borrar vehiculo", getEscenario());
+		borrarVehiculo.getEscenario().setResizable(false);
+		borrarVehiculo.getEscenario().showAndWait();
+		refrescarTablas();
+	}
+
+	@FXML
+	void buscarVehiculo(ActionEvent event) {
+		BuscarVehiculo buscarVehiculo = (BuscarVehiculo) Controladores.get("vistas/BuscarVehiculo.fxml", "Buscar vehiculo", getEscenario());
+		buscarVehiculo.getEscenario().setResizable(false);
+		buscarVehiculo.getEscenario().showAndWait();
+		refrescarTablas();
+	}
+
+	@FXML
+	void insertarAlquiler(ActionEvent event) {
+	
+	}
+
+	@FXML
+	void devolverAlquiler(ActionEvent event) {
+	
+	}
+
+	@FXML
+	void buscarAlquiler(ActionEvent event) {
+	
 	}
 
 	@FXML
@@ -317,38 +390,8 @@ public class VentanaPrincipal extends Controlador {
 	}
 
 	@FXML
-	void borrarVehiculo(ActionEvent event) {
-
-	}
-
-	@FXML
-	void borrarVehiculoMenu(ActionEvent event) {
-
-	}
-
-	@FXML
-	void buscarAlquiler(ActionEvent event) {
-
-	}
-
-	@FXML
-	void buscarVehiculo(ActionEvent event) {
-
-	}
-
-	@FXML
-	void devolverAlquiler(ActionEvent event) {
-
-	}
-
-	@FXML
-	void insertarAlquiler(ActionEvent event) {
-
-	}
-
-	@FXML
-	void insertarVehiculo(ActionEvent event) {
-
+	void abrirAcercaDe(ActionEvent event) {
+	
 	}
 
 	@FXML

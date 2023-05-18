@@ -34,6 +34,8 @@ public class BorrarCliente extends Controlador {
 
 	@FXML
 	void initialize() {
+		// Este limpiar esta aqui para que direcatamente aparezca el campo en rojo
+		Controles.limpiarCamposTexto(tfDni);
 		tfDni.textProperty().addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_DNI, tfDni));
 		Controles.validarConEnter(this::confirmar, tfDni);
 	}
@@ -66,6 +68,7 @@ public class BorrarCliente extends Controlador {
 
 	@FXML
 	void cancelar(ActionEvent event) {
+		Controles.limpiarCamposTexto(tfDni);
 		getEscenario().close();
 	}
 

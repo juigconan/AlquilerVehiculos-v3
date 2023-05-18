@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -56,7 +57,7 @@
                               <ContextMenu>
                                 <items>
                                   <MenuItem fx:id="miInsertarCliente" mnemonicParsing="false" onAction="#insertarCliente" text="Insertar cliente" />
-                                    <MenuItem fx:id="miModificarCliente" mnemonicParsing="false" onAction="#modificarCliente" text="Modificar cliente" />
+                                    <MenuItem fx:id="miModificarCliente" disable="true" mnemonicParsing="false" onAction="#modificarCliente" text="Modificar cliente" />
                                     <MenuItem mnemonicParsing="false" onAction="#buscarCliente" text="Buscar cliente" />
                                     <MenuItem fx:id="miBorrarCliente" disable="true" mnemonicParsing="false" onAction="#borrarCliente" text="Borrar cliente" />
                                 </items>
@@ -67,7 +68,10 @@
                   </AnchorPane>
                </content>
                <graphic>
-                  <ImageView fx:id="ivClientes" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivClientes" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../imagenes/imagenClientes.png" />
+                     </image></ImageView>
                </graphic>
           </Tab>
           <Tab fx:id="tabVehiculos" closable="false" text="Vehiculos">
@@ -97,7 +101,10 @@
                   </AnchorPane>
                </content>
                <graphic>
-                  <ImageView fx:id="ivVehiculos" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivVehiculos" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../imagenes/imagenVehiculos.png" />
+                     </image></ImageView>
                </graphic>
           </Tab>
             <Tab fx:id="tabAlquileres" text="Alquileres">
@@ -130,7 +137,10 @@
                   </AnchorPane>
                </content>
                <graphic>
-                  <ImageView fx:id="ivAlquileres" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="ivAlquileres" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../imagenes/imagenAlquileres.png" />
+                     </image></ImageView>
                </graphic>
             </Tab>
         </tabs>
