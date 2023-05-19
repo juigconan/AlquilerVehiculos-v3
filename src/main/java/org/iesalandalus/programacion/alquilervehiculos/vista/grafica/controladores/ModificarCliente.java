@@ -64,12 +64,8 @@ public class ModificarCliente extends Controlador {
 		Cliente cliente = null;
 		try {
 			cliente = Cliente.getClienteConDni(tfDni.getText());
-			if (Dialogos.mostrarDialogoConfirmacion("Modificar",
-					String.format("¿Seguro que desea modificar a %s - %s?",
-							vista.getControlador().getClientes()
-									.get(vista.getControlador().getClientes().indexOf(cliente)).getNombre(),
-							cliente.getDni()),
-					getEscenario())) {
+			if (Dialogos.mostrarDialogoConfirmacion("Modificar", String.format("¿Seguro que desea modificar a %s - %s?",
+					vista.getControlador().buscar(cliente).getNombre(), cliente.getDni()), getEscenario())) {
 				vista.getControlador().modificarCliente(Cliente.getClienteConDni(tfDni.getText()), tfNombre.getText(),
 						tfTelefono.getText());
 			}

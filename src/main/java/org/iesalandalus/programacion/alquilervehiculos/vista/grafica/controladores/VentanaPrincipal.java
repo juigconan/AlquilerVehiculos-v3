@@ -1,6 +1,5 @@
 package org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controladores;
 
-import java.io.IOException;
 import java.time.LocalDate;
 
 import javax.naming.OperationNotSupportedException;
@@ -12,7 +11,6 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Furgoneta;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Turismo;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.VistaGrafica;
-import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.recursos.LocalizadorRecursos;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controlador;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controladores;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controles.FormateadorCeldaFecha;
@@ -22,9 +20,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -33,7 +28,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 public class VentanaPrincipal extends Controlador {
 
@@ -299,24 +293,12 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void modificarCliente(ActionEvent event) {
-		// Creo la escena manualmente para poder coger el controlador
-		FXMLLoader loaderModificarCliente = new FXMLLoader(
-				LocalizadorRecursos.class.getResource("vistas/ModificarCliente.fxml"));
 		Cliente cliente = tvClientes.getSelectionModel().getSelectedItem();
-		try {
-			Parent raiz = loaderModificarCliente.load();
-			ModificarCliente modificarCliente = loaderModificarCliente.getController();
-			modificarCliente.cargarDatos(cliente.getNombre(), cliente.getDni(), cliente.getTelefono());
-			Stage escena = new Stage();
-			escena.setTitle("Modificar cliente");
-			escena.setScene(new Scene(raiz));
-			modificarCliente.setEscenario(escena);
-			escena.setResizable(false);
-			escena.showAndWait();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ModificarCliente modificarCliente = (ModificarCliente) Controladores.get("vistas/ModificarCliente.fxml",
+				"Modificar cliente", getEscenario());
+		modificarCliente.getEscenario().setResizable(false);
+		modificarCliente.cargarDatos(cliente.getNombre(), cliente.getDni(), cliente.getTelefono());
+		modificarCliente.getEscenario().showAndWait();
 		refrescarTablas();
 	}
 
@@ -358,7 +340,8 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void buscarVehiculo(ActionEvent event) {
-		BuscarVehiculo buscarVehiculo = (BuscarVehiculo) Controladores.get("vistas/BuscarVehiculo.fxml", "Buscar vehiculo", getEscenario());
+		BuscarVehiculo buscarVehiculo = (BuscarVehiculo) Controladores.get("vistas/BuscarVehiculo.fxml",
+				"Buscar vehiculo", getEscenario());
 		buscarVehiculo.getEscenario().setResizable(false);
 		buscarVehiculo.getEscenario().showAndWait();
 		refrescarTablas();
@@ -366,22 +349,38 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void insertarAlquiler(ActionEvent event) {
-	
+		InsertarAlquiler insertarAlquiler = (InsertarAlquiler) Controladores.get("vistas/InsertarAlquiler.fxml",
+				"Insertar alquiler", getEscenario());
+		insertarAlquiler.getEscenario().setResizable(false);
+		insertarAlquiler.getEscenario().showAndWait();
+		refrescarTablas();
 	}
 
 	@FXML
 	void devolverAlquiler(ActionEvent event) {
-	
+
 	}
 
 	@FXML
 	void buscarAlquiler(ActionEvent event) {
-	
+
 	}
 
 	@FXML
 	void borrarAlquiler(ActionEvent event) {
-
+		Alquiler alquiler = tvAlquileres.getSelectionModel().getSelectedItem();
+		try {
+			if (Dialogos
+					.mostrarDialogoConfirmacion("Borrar",
+							String.format("¿Seguro que desea borrar el alquiler con cliente %s y vehiculo %s?",
+									alquiler.getCliente().getDni(), alquiler.getVehiculo().getMatricula()),
+							getEscenario())) {
+				vista.getControlador().borrarAlquiler(alquiler);
+				refrescarTablas();
+			}
+		} catch (OperationNotSupportedException e) {
+			e.getStackTrace();
+		}
 	}
 
 	@FXML
@@ -391,7 +390,7 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void abrirAcercaDe(ActionEvent event) {
-	
+
 	}
 
 	@FXML

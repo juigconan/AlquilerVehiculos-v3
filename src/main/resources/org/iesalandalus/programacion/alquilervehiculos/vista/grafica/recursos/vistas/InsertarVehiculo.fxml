@@ -29,7 +29,7 @@
         </rowConstraints>
          <children>
             <ChoiceBox fx:id="cbTipo" prefWidth="150.0" GridPane.halignment="CENTER" />
-            <TextField fx:id="tfMarca" disable="true" promptText="Marca" GridPane.rowIndex="2">
+            <TextField fx:id="tfMarca" promptText="Marca" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </GridPane.margin>
@@ -37,7 +37,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TextField>
-            <TextField fx:id="tfModelo" disable="true" promptText="Modelo" GridPane.rowIndex="3">
+            <TextField fx:id="tfModelo" promptText="Modelo" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </GridPane.margin>
@@ -45,7 +45,7 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </TextField>
-            <TextField fx:id="tfMatricula" disable="true" promptText="Matricula" GridPane.rowIndex="4">
+            <TextField fx:id="tfMatricula" promptText="Matricula" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </GridPane.margin>

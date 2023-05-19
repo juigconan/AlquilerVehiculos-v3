@@ -79,8 +79,7 @@ public class BuscarCliente extends Controlador {
 		tcDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
 		tcTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
 		try {
-			tvCliente.getItems().add(vista.getControlador().getClientes()
-					.get(vista.getControlador().getClientes().indexOf(Cliente.getClienteConDni(tfDni.getText()))));
+			tvCliente.getItems().add(vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText())));
 		} catch (IllegalArgumentException e) {
 			tvCliente.setVisible(false);
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());

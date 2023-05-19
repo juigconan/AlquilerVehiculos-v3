@@ -72,9 +72,6 @@ public class InsertarVehiculo extends Controlador {
 	}
 
 	private void seleccionarTipo(String tipo) {
-		tfMarca.setDisable(false);
-		tfMatricula.setDisable(false);
-		tfModelo.setDisable(false);
 		if (tipo == "Autobus") {
 			limpiarCampos(tfPma, tfCilindrada);
 			tfPlazas.setDisable(false);

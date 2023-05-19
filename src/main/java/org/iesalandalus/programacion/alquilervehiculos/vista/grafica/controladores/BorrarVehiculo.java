@@ -2,7 +2,6 @@ package org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controlado
 
 import javax.naming.OperationNotSupportedException;
 
-import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Cliente;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controlador;

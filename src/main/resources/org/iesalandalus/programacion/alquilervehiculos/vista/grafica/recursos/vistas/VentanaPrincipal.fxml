@@ -126,7 +126,6 @@
                                 <items>
                                   <MenuItem fx:id="miInsertarAlquiler" mnemonicParsing="false" onAction="#insertarAlquiler" text="Insertar alquiler" />
                                     <MenuItem fx:id="miDevolverAlquiler" disable="true" mnemonicParsing="false" onAction="#devolverAlquiler" text="Devolver alquiler" />
-                                    <MenuItem fx:id="miDevolverAlquiler" mnemonicParsing="false" onAction="#devolverAlquiler" text="Borrar alquiler" />
                                     <MenuItem fx:id="miBuscarAlquiler" mnemonicParsing="false" onAction="#buscarAlquiler" text="Buscar alquiler" />
                                     <MenuItem fx:id="miBorrarAlquiler" disable="true" mnemonicParsing="false" onAction="#borrarAlquiler" text="Borrar alquiler" />
                                 </items>
