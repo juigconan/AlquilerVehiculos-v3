@@ -37,7 +37,11 @@
                   <MenuItem fx:id="miBuscarAlquilerMenu" mnemonicParsing="false" onAction="#buscarAlquiler" text="Alquiler" />
                </items>
             </Menu>
-          <Menu fx:id="mEstadisticas" mnemonicParsing="false" onAction="#mostrarEstadisticas" text="Estadisticas" />
+          <Menu fx:id="mOpciones" mnemonicParsing="false" text="Opciones">
+               <items>
+                  <MenuItem fx:id="miMostrarEstadisticas" mnemonicParsing="false" onAction="#mostrarEstadisticas" text="Mostrar estadisticas" />
+                  <MenuItem fx:id="miCerrarAplicacion" mnemonicParsing="false" onAction="#cerrar" text="Cerrar la aplicación" />
+               </items></Menu>
           <Menu fx:id="mAcercaDe" mnemonicParsing="false" onAction="#abrirAcercaDe" text="Acerca de..." />
         </menus>
       </MenuBar>

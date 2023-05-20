@@ -90,6 +90,7 @@ public class BuscarCliente extends Controlador {
 	void aceptar(ActionEvent event) {
 		tvCliente.setVisible(false);
 		tvCliente.getItems().clear();
+		tfDni.clear();
 		getEscenario().close();
 	}
 

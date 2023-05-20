@@ -65,7 +65,6 @@ public class BuscarVehiculo extends Controlador {
 		tfMatricula.textProperty()
 				.addListener((ob, ov, nv) -> Controles.validarCampoTexto(Vehiculo.ER_MATRICULA, tfMatricula));
 		Controles.validarConEnter(this::confirmar, tfMatricula);
-//		getEscenario().onCloseRequestProperty(e -> tfMatricula.clear());
 	}
 
 	private void confirmar(KeyEvent e) {

@@ -10,6 +10,7 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controlador;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controles;
+import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Dialogos;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +22,7 @@ import javafx.scene.input.KeyEvent;
 
 public class InsertarAlquiler extends Controlador {
 
-	VistaGrafica vista = VistaGrafica.getInstancia();
+	private VistaGrafica vista = VistaGrafica.getInstancia();
 
 	@FXML
 	private Button btAceptar;
@@ -65,14 +66,14 @@ public class InsertarAlquiler extends Controlador {
 			vista.getControlador().insertarAlquiler(new Alquiler(cliente, vehiculo, fechaAlquiler));
 			cancelar(event);
 		} catch (OperationNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());
 		}
 	}
 
 	@FXML
 	void cancelar(ActionEvent event) {
 		Controles.limpiarCamposTexto(tfDni, tfMatricula);
+		dpAlquiler.getEditor().clear();
 		dpAlquiler.setValue(null);
 		getEscenario().close();
 	}

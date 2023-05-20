@@ -28,6 +28,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class VentanaPrincipal extends Controlador {
 
@@ -51,8 +53,11 @@ public class VentanaPrincipal extends Controlador {
 	@FXML
 	private Menu mBuscar;
 
-	@FXML
-	private Menu mEstadisticas;
+    @FXML
+    private Menu mOpciones;
+    
+    @FXML
+    private MenuItem miCerrarAplicacion;
 
 	@FXML
 	private Menu mInsertar;
@@ -172,6 +177,9 @@ public class VentanaPrincipal extends Controlador {
 	private TableView<Vehiculo> tvVehiculos;
 
 	@FXML
+	private MenuItem miMostrarEstadisticas;
+
+	@FXML
 	void initialize() {
 		refrescarTablas();
 		actualizarMenus();
@@ -184,6 +192,8 @@ public class VentanaPrincipal extends Controlador {
 				.addListener((ob, ov, nv) -> miModificarCliente.setDisable(nv == null));
 		tvAlquileres.getSelectionModel().selectedItemProperty()
 				.addListener((ob, ov, nv) -> miBorrarAlquiler.setDisable(nv == null));
+		tvAlquileres.getSelectionModel().selectedItemProperty()
+				.addListener((ob, ov, nv) -> miDevolverAlquiler.setDisable(nv == null));
 		tvVehiculos.getSelectionModel().selectedItemProperty()
 				.addListener((ob, ov, nv) -> miBorrarVehiculo.setDisable(nv == null));
 	}
@@ -251,7 +261,7 @@ public class VentanaPrincipal extends Controlador {
 	@FXML
 	void insertarCliente(ActionEvent event) {
 		InsertarCliente insertarCliente = (InsertarCliente) Controladores.get("vistas/InsertarCliente.fxml",
-				"Borrar cliente", getEscenario());
+				"Insertar cliente", getEscenario());
 		insertarCliente.getEscenario().setResizable(false);
 		insertarCliente.getEscenario().showAndWait();
 		refrescarTablas();
@@ -358,12 +368,21 @@ public class VentanaPrincipal extends Controlador {
 
 	@FXML
 	void devolverAlquiler(ActionEvent event) {
-
+		DevolverAlquiler devolverAlquiler = (DevolverAlquiler) Controladores.get("vistas/DevolverAlquiler.fxml",
+				"Devolver alquiler", getEscenario());
+		devolverAlquiler.getEscenario().setResizable(false);
+		devolverAlquiler.cargarDatos(tvAlquileres.getSelectionModel().getSelectedItem());
+		devolverAlquiler.getEscenario().showAndWait();
+		refrescarTablas();
 	}
 
 	@FXML
 	void buscarAlquiler(ActionEvent event) {
-
+		BuscarAlquiler buscarAlquiler = (BuscarAlquiler) Controladores.get("vistas/BuscarAlquiler.fxml",
+				"Buscar alquiler", getEscenario());
+		buscarAlquiler.getEscenario().setResizable(false);
+		buscarAlquiler.getEscenario().showAndWait();
+		refrescarTablas();
 	}
 
 	@FXML
@@ -392,10 +411,26 @@ public class VentanaPrincipal extends Controlador {
 	void abrirAcercaDe(ActionEvent event) {
 
 	}
+	
+
+    @FXML
+    void cerrar(ActionEvent event) {
+    		if (Dialogos.mostrarDialogoConfirmacion("Salir", "¿Estas seguro de que quieres salir de la aplicación?",
+    				getEscenario())) {
+    			getEscenario().close();
+    		} else {
+    			event.consume();
+    		}
+    	
+
+    }
 
 	@FXML
 	void mostrarEstadisticas(ActionEvent event) {
-
+		VentanaEstadisticas ventanaEstadisticas = (VentanaEstadisticas) Controladores
+				.get("vistas/VentanaEstadisticas.fxml", "Estadisticas", getEscenario());
+		ventanaEstadisticas.getEscenario().setResizable(false);
+		ventanaEstadisticas.getEscenario().showAndWait();
 	}
 
 }
