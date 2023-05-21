@@ -56,6 +56,7 @@ public class DevolverAlquiler extends Controlador {
 	void devolver(ActionEvent event) {
 		try {
 			vista.getControlador().devolverAlquiler(cliente, dpFechaDevolucion.getValue());
+			Dialogos.mostrarDialogoInformacion("EXITO", "Alquiler devuelto correctamente", getEscenario());
 			cancelar(event);
 		} catch (OperationNotSupportedException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());

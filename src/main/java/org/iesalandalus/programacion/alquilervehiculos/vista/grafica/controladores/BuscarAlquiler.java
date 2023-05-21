@@ -31,7 +31,7 @@ import javafx.scene.input.KeyEvent;
 public class BuscarAlquiler extends Controlador {
 
 	private VistaGrafica vista = VistaGrafica.getInstancia();
-	
+
 	@FXML
 	private Button btAceptar;
 
@@ -58,6 +58,8 @@ public class BuscarAlquiler extends Controlador {
 
 	@FXML
 	private TableColumn<Alquiler, String> tcVehiculo;
+	@FXML
+	private TableColumn<Alquiler, String> tcPrecio;
 
 	@FXML
 	private TextField tfDni;
@@ -77,6 +79,15 @@ public class BuscarAlquiler extends Controlador {
 		tfDni.textProperty().addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_DNI, tfDni));
 		Controles.validarConEnter(this::confirmar, tfMatricula, tfDni);
 		dpFechaAlquiler.setOnKeyReleased(this::confirmar);
+		tcCliente.setCellValueFactory(fila -> new SimpleObjectProperty<String>(fila.getValue().getCliente().getDni()));
+		tcVehiculo.setCellValueFactory(
+				fila -> new SimpleObjectProperty<String>(fila.getValue().getVehiculo().getMatricula()));
+		tcFechaAlquiler.setCellValueFactory(new PropertyValueFactory<>("fechaAlquiler"));
+		tcFechaDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
+		tcFechaAlquiler.setCellFactory(celda -> new FormateadorCeldaFecha());
+		tcFechaDevolucion.setCellFactory(celda -> new FormateadorCeldaFecha());
+		tcPrecio.setCellValueFactory(
+				fila -> new SimpleObjectProperty<String>(VentanaPrincipal.calcularPrecio(fila.getValue().getPrecio())));
 	}
 
 	private void confirmar(KeyEvent e) {
@@ -86,25 +97,36 @@ public class BuscarAlquiler extends Controlador {
 	}
 
 	void buscar(ActionEvent event) {
-		tvAlquiler.setVisible(true);
-		tvAlquiler.getSelectionModel().clearSelection();
-		tvAlquiler.getItems().clear();
-		tcCliente.setCellValueFactory(fila -> new SimpleObjectProperty<String>(fila.getValue().getCliente().getDni()));
-		tcVehiculo.setCellValueFactory(
-				fila -> new SimpleObjectProperty<String>(fila.getValue().getVehiculo().getMatricula()));
-		tcFechaAlquiler.setCellValueFactory(new PropertyValueFactory<>("fechaAlquiler"));
-		tcFechaDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
-		tcFechaAlquiler.setCellFactory(celda -> new FormateadorCeldaFecha());
-		tcFechaDevolucion.setCellFactory(celda -> new FormateadorCeldaFecha());
+		Cliente cliente = null;
+		Vehiculo vehiculo = null;
+		refrescarTabla();
 		try {
-			Cliente cliente = vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText()));
-			Vehiculo vehiculo = vista.getControlador().buscar(Vehiculo.getVehiculoConMatricula(tfMatricula.getText()));
-			tvAlquiler.getItems().add(vista.getControlador().buscar(
-					vista.getControlador().buscar(new Alquiler(cliente, vehiculo, dpFechaAlquiler.getValue()))));
+			if (!tfDni.getText().isBlank() && tfMatricula.getText().isBlank()) {
+				cliente = vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText()));
+				tvAlquiler.getItems().addAll(vista.getControlador().getAlquileresCliente(cliente));
+			} else if (tfDni.getText().isBlank() && !tfMatricula.getText().isBlank()) {
+				vehiculo = vista.getControlador().buscar(Vehiculo.getVehiculoConMatricula(tfMatricula.getText()));
+				tvAlquiler.getItems().addAll(vista.getControlador().getAlquileresVehiculo(vehiculo));
+			} else if (!tfDni.getText().isBlank() && !tfMatricula.getText().isBlank() && dpFechaAlquiler.getValue() != null) {
+				cliente = vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText()));
+				vehiculo = vista.getControlador().buscar(Vehiculo.getVehiculoConMatricula(tfMatricula.getText()));
+				tvAlquiler.getItems().add(vista.getControlador().buscar(
+						vista.getControlador().buscar(new Alquiler(cliente, vehiculo, dpFechaAlquiler.getValue()))));
+			} else {
+				tvAlquiler.setVisible(false);
+				Dialogos.mostrarDialogoAdvertencia("ADVERTENCIA", "Introduce la matricula, el dNI o todos los datos", getEscenario());
+			}
+
 		} catch (IllegalArgumentException e) {
 			tvAlquiler.setVisible(false);
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());
 		}
+	}
+
+	private void refrescarTabla() {
+		tvAlquiler.setVisible(true);
+		tvAlquiler.getSelectionModel().clearSelection();
+		tvAlquiler.getItems().clear();
 	}
 
 	@FXML
@@ -141,7 +163,8 @@ public class BuscarAlquiler extends Controlador {
 
 	@FXML
 	void devolver(ActionEvent event) {
-		DevolverAlquiler devolverAlquiler = (DevolverAlquiler) Controladores.get("vistas/DevolverAlquiler.fxml", "Devolver alquiler", getEscenario());
+		DevolverAlquiler devolverAlquiler = (DevolverAlquiler) Controladores.get("vistas/DevolverAlquiler.fxml",
+				"Devolver alquiler", getEscenario());
 		devolverAlquiler.getEscenario().setResizable(false);
 		devolverAlquiler.cargarDatos(tvAlquiler.getSelectionModel().getSelectedItem());
 		devolverAlquiler.getEscenario().showAndWait();

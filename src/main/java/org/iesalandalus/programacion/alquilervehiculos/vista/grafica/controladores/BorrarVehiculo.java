@@ -60,6 +60,8 @@ public class BorrarVehiculo extends Controlador {
 					getEscenario())) {
 				vista.getControlador().borrarVehiculo(vehiculo);
 			}
+			Dialogos.mostrarDialogoInformacion("EXITO", "Vehículo insertado correctamente", getEscenario());
+
 			cancelar(event);
 		} catch (IllegalArgumentException | NullPointerException | OperationNotSupportedException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());

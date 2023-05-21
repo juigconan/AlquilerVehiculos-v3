@@ -57,7 +57,6 @@ public class InsertarCliente extends Controlador {
 			vista.getControlador()
 					.insertarCliente(new Cliente(tfNombre.getText(), tfDni.getText(), tfTelefono.getText()));
 			Dialogos.mostrarDialogoInformacion("EXITO", "Cliente insertado correctamente", getEscenario());
-
 			cancelar(event);
 		} catch (IllegalArgumentException | NullPointerException | OperationNotSupportedException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());

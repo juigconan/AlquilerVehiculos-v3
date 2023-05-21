@@ -24,20 +24,20 @@ public class InsertarAlquiler extends Controlador {
 
 	private VistaGrafica vista = VistaGrafica.getInstancia();
 
-	@FXML
-	private Button btAceptar;
+    @FXML
+    private Button btAceptar;
 
-	@FXML
-	private Button btCancelar;
+    @FXML
+    private Button btCancelar;
 
-	@FXML
-	private DatePicker dpAlquiler;
+    @FXML
+    private DatePicker dpFechaAlquiler;
 
-	@FXML
-	private TextField tfDni;
+    @FXML
+    private TextField tfDni;
 
-	@FXML
-	private TextField tfMatricula;
+    @FXML
+    private TextField tfMatricula;
 
 	@FXML
 	void initialize() {
@@ -48,7 +48,7 @@ public class InsertarAlquiler extends Controlador {
 		tfDni.textProperty()
 		.addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_DNI, tfDni));
 		Controles.validarConEnter(this::confirmar, tfDni, tfMatricula);
-		dpAlquiler.setOnKeyReleased(this::confirmar);
+		dpFechaAlquiler.setOnKeyReleased(this::confirmar);
 	}
 
 	private void confirmar(KeyEvent e) {
@@ -64,6 +64,7 @@ public class InsertarAlquiler extends Controlador {
 		LocalDate fechaAlquiler = dpAlquiler.getValue();
 		try {
 			vista.getControlador().insertarAlquiler(new Alquiler(cliente, vehiculo, fechaAlquiler));
+			Dialogos.mostrarDialogoInformacion("EXITO", "Alquieler insertado correctamente", getEscenario());
 			cancelar(event);
 		} catch (OperationNotSupportedException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), getEscenario());
@@ -73,8 +74,8 @@ public class InsertarAlquiler extends Controlador {
 	@FXML
 	void cancelar(ActionEvent event) {
 		Controles.limpiarCamposTexto(tfDni, tfMatricula);
-		dpAlquiler.getEditor().clear();
-		dpAlquiler.setValue(null);
+		dpFechaAlquiler.getEditor().clear();
+		dpFechaAlquiler.setValue(null);
 		getEscenario().close();
 	}
 

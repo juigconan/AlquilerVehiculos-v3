@@ -2,7 +2,9 @@ package org.iesalandalus.programacion.alquilervehiculos.vista.grafica.controlado
 
 import javax.naming.OperationNotSupportedException;
 
+import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Alquiler;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Cliente;
+import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.VistaGrafica;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controlador;
 import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.Controles;
@@ -11,12 +13,12 @@ import org.iesalandalus.programacion.alquilervehiculos.vista.grafica.utilidades.
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class BorrarCliente extends Controlador {
+public class BorrarAlquiler extends Controlador {
 
 	private VistaGrafica vista = VistaGrafica.getInstancia();
 
@@ -27,17 +29,23 @@ public class BorrarCliente extends Controlador {
 	private Button btCancelar;
 
 	@FXML
-	private Label lbTitulo;
+	private DatePicker dpFechaAlquiler;
 
 	@FXML
 	private TextField tfDni;
 
 	@FXML
+	private TextField tfMatricula;
+
+	@FXML
 	void initialize() {
 		// Este limpiar esta aqui para que direcatamente aparezca el campo en rojo
-		Controles.limpiarCamposTexto(tfDni);
+		Controles.limpiarCamposTexto(tfMatricula, tfDni);
+		tfMatricula.textProperty()
+				.addListener((ob, ov, nv) -> Controles.validarCampoTexto(Vehiculo.ER_MATRICULA, tfMatricula));
 		tfDni.textProperty().addListener((ob, ov, nv) -> Controles.validarCampoTexto(Cliente.ER_DNI, tfDni));
-		Controles.validarConEnter(this::confirmar, tfDni);
+		Controles.validarConEnter(this::confirmar, tfMatricula);
+		dpFechaAlquiler.setOnKeyReleased(this::confirmar);
 	}
 
 	private void confirmar(KeyEvent e) {
@@ -48,20 +56,19 @@ public class BorrarCliente extends Controlador {
 
 	@FXML
 	void borrar(ActionEvent event) {
-		Cliente cliente = null;
 		try {
-			cliente = Cliente.getClienteConDni(tfDni.getText());
-			if (Dialogos.mostrarDialogoConfirmacion("Borrar",
-					String.format("¿Seguro que desea borrar a %s - %s?",
-							vista.getControlador().getClientes()
-									.get(vista.getControlador().getClientes().indexOf(cliente)).getNombre(),
-							cliente.getDni()),
-					getEscenario())) {
-				vista.getControlador().borrarCliente(cliente);
+			Cliente cliente = vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText()));
+			Vehiculo vehiculo = vista.getControlador().buscar(Vehiculo.getVehiculoConMatricula(tfMatricula.getText()));
+			Alquiler alquiler = new Alquiler(cliente, vehiculo, dpFechaAlquiler.getValue());
+			if (Dialogos
+					.mostrarDialogoConfirmacion("Borrar",
+							String.format("¿Seguro que desea borrar el alquiler con cliente %s y vehiculo %s?",
+									alquiler.getCliente().getDni(), alquiler.getVehiculo().getMatricula()),
+							getEscenario())) {
+				vista.getControlador().borrarAlquiler(vista.getControlador().buscar(alquiler));
 			}
-			Dialogos.mostrarDialogoInformacion("EXITO", "Cliente borrado correctamente", getEscenario());
 			cancelar(event);
-		} catch (IllegalArgumentException | NullPointerException | OperationNotSupportedException e) {
+		} catch (OperationNotSupportedException | IllegalArgumentException | NullPointerException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
 		}
 
@@ -69,7 +76,10 @@ public class BorrarCliente extends Controlador {
 
 	@FXML
 	void cancelar(ActionEvent event) {
-		Controles.limpiarCamposTexto(tfDni);
+		tfMatricula.clear();
+		tfDni.clear();
+		dpFechaAlquiler.getEditor().clear();
+		dpFechaAlquiler.setValue(null);
 		getEscenario().close();
 	}
 

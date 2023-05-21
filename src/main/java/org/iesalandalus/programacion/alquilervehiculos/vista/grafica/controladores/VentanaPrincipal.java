@@ -28,8 +28,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class VentanaPrincipal extends Controlador {
 
@@ -45,19 +43,19 @@ public class VentanaPrincipal extends Controlador {
 	private ImageView ivVehiculos;
 
 	@FXML
-	private Menu mAcercaDe;
-
-	@FXML
 	private Menu mBorrar;
 
 	@FXML
 	private Menu mBuscar;
 
-    @FXML
-    private Menu mOpciones;
-    
-    @FXML
-    private MenuItem miCerrarAplicacion;
+	@FXML
+	private Menu mOpciones;
+
+	@FXML
+	private MenuItem miCerrarAplicacion;
+
+	@FXML
+	private MenuItem miAcercaDe;
 
 	@FXML
 	private Menu mInsertar;
@@ -168,6 +166,9 @@ public class VentanaPrincipal extends Controlador {
 	private TableColumn<Alquiler, String> tcVehiculo;
 
 	@FXML
+	private TableColumn<Alquiler, String> tcPrecio;
+
+	@FXML
 	private TableView<Alquiler> tvAlquileres;
 
 	@FXML
@@ -228,7 +229,17 @@ public class VentanaPrincipal extends Controlador {
 		tcFechaDevolucion.setCellValueFactory(new PropertyValueFactory<>("fechaDevolucion"));
 		tcFechaAlquiler.setCellFactory(celda -> new FormateadorCeldaFecha());
 		tcFechaDevolucion.setCellFactory(celda -> new FormateadorCeldaFecha());
+		tcPrecio.setCellValueFactory(
+				fila -> new SimpleObjectProperty<String>(calcularPrecio(fila.getValue().getPrecio())));
 		tvAlquileres.setItems(FXCollections.observableList(vista.getControlador().getAlquileres()));
+	}
+
+	protected static String calcularPrecio(int precio) {
+		String pma = "--";
+		if (precio > 0) {
+			pma = Integer.toString(precio);
+		}
+		return pma;
 	}
 
 	protected static String calcularPma(Vehiculo vehiculo) {
@@ -288,7 +299,7 @@ public class VentanaPrincipal extends Controlador {
 				refrescarTablas();
 			}
 		} catch (OperationNotSupportedException e) {
-			e.getStackTrace();
+			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
 		}
 	}
 
@@ -335,7 +346,7 @@ public class VentanaPrincipal extends Controlador {
 				refrescarTablas();
 			}
 		} catch (OperationNotSupportedException e) {
-			e.getStackTrace();
+			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
 		}
 	}
 
@@ -398,32 +409,18 @@ public class VentanaPrincipal extends Controlador {
 				refrescarTablas();
 			}
 		} catch (OperationNotSupportedException e) {
-			e.getStackTrace();
+			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
 		}
 	}
 
 	@FXML
 	void borrarAlquilerMenu(ActionEvent event) {
-
+		BorrarAlquiler borrarAlquiler = (BorrarAlquiler) Controladores.get("vistas/BorrarAlquiler.fxml",
+				"Borrar alquiler", getEscenario());
+		borrarAlquiler.getEscenario().setResizable(false);
+		borrarAlquiler.getEscenario().showAndWait();
+		refrescarTablas();
 	}
-
-	@FXML
-	void abrirAcercaDe(ActionEvent event) {
-
-	}
-	
-
-    @FXML
-    void cerrar(ActionEvent event) {
-    		if (Dialogos.mostrarDialogoConfirmacion("Salir", "¿Estas seguro de que quieres salir de la aplicación?",
-    				getEscenario())) {
-    			getEscenario().close();
-    		} else {
-    			event.consume();
-    		}
-    	
-
-    }
 
 	@FXML
 	void mostrarEstadisticas(ActionEvent event) {
@@ -431,6 +428,25 @@ public class VentanaPrincipal extends Controlador {
 				.get("vistas/VentanaEstadisticas.fxml", "Estadisticas", getEscenario());
 		ventanaEstadisticas.getEscenario().setResizable(false);
 		ventanaEstadisticas.getEscenario().showAndWait();
+	}
+
+	@FXML
+	void abrirAcercaDe(ActionEvent event) {
+		VentanaInformacion ventanaInformacion = (VentanaInformacion) Controladores.get("vistas/VentanaInformacion.fxml",
+				"Acerca de....", getEscenario());
+		ventanaInformacion.getEscenario().setResizable(false);
+		ventanaInformacion.getEscenario().showAndWait();
+	}
+
+	@FXML
+	void cerrar(ActionEvent event) {
+		if (Dialogos.mostrarDialogoConfirmacion("Salir", "¿Estas seguro de que quieres salir de la aplicación?",
+				getEscenario())) {
+			getEscenario().close();
+		} else {
+			event.consume();
+		}
+
 	}
 
 }

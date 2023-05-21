@@ -69,6 +69,7 @@ public class ModificarCliente extends Controlador {
 				vista.getControlador().modificarCliente(Cliente.getClienteConDni(tfDni.getText()), tfNombre.getText(),
 						tfTelefono.getText());
 			}
+			Dialogos.mostrarDialogoInformacion("EXITO", "Cliente modificado correctamente", getEscenario());
 			cancelar(event);
 		} catch (IllegalArgumentException | NullPointerException | OperationNotSupportedException e) {
 			Dialogos.mostrarDialogoError("ERROR", e.getMessage(), this.getEscenario());
