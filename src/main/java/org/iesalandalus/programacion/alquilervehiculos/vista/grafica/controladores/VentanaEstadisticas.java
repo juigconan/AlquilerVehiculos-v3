@@ -60,8 +60,9 @@ public class VentanaEstadisticas extends Controlador {
 		}
 
 		if (mapaEstadisticas == null) {
-			//No se deberia llegar aqui
-			Dialogos.mostrarDialogoError("ERROR", "ERROR: No es posible mostrar las estadisticas, la fecha no es válida.", getEscenario());
+			// No se deberia llegar aqui
+			Dialogos.mostrarDialogoError("ERROR",
+					"ERROR: No es posible mostrar las estadisticas, la fecha no es válida.", getEscenario());
 		} else {
 			for (Map.Entry<TipoVehiculo, Integer> entrada : mapaEstadisticas.entrySet()) {
 				TipoVehiculo tipo = entrada.getKey();

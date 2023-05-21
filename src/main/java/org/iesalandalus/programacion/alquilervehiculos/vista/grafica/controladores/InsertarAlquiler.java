@@ -61,7 +61,7 @@ public class InsertarAlquiler extends Controlador {
 	void insertar(ActionEvent event) {
 		Cliente cliente = vista.getControlador().buscar(Cliente.getClienteConDni(tfDni.getText()));
 		Vehiculo vehiculo = vista.getControlador().buscar(Vehiculo.getVehiculoConMatricula(tfMatricula.getText()));
-		LocalDate fechaAlquiler = dpAlquiler.getValue();
+		LocalDate fechaAlquiler = dpFechaAlquiler.getValue();
 		try {
 			vista.getControlador().insertarAlquiler(new Alquiler(cliente, vehiculo, fechaAlquiler));
 			Dialogos.mostrarDialogoInformacion("EXITO", "Alquieler insertado correctamente", getEscenario());

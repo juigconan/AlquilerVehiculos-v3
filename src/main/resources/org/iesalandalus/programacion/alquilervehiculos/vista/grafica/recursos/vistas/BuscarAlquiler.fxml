@@ -53,7 +53,7 @@
             <DatePicker fx:id="dpFechaAlquiler" promptText="Fecha de alquiler" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
                <children>
-                  <Button fx:id="btAceptar" mnemonicParsing="false" onAction="#aceptar" text="Aceptar">
+                  <Button fx:id="btAceptar" mnemonicParsing="false" onAction="#aceptar" text="Salir">
                      <HBox.margin>
                         <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                      </HBox.margin>
@@ -63,10 +63,10 @@
                   </Button>
                </children>
             </HBox>
-            <TableView fx:id="tvAlquiler" prefHeight="79.0" prefWidth="600.0" visible="false" GridPane.rowIndex="4">
+            <TableView fx:id="tvAlquiler" prefHeight="79.0" prefWidth="600.0" GridPane.rowIndex="4">
               <columns>
-                <TableColumn fx:id="tcCliente" prefWidth="120.0" text="Cliente" visible="false" />
-                <TableColumn fx:id="tcVehiculo" prefWidth="120.0" text="Vehiculo" visible="false" />
+                <TableColumn fx:id="tcCliente" prefWidth="120.0" text="Cliente" />
+                <TableColumn fx:id="tcVehiculo" prefWidth="120.0" text="Vehiculo" />
                   <TableColumn fx:id="tcFechaAlquiler" prefWidth="120.0" text="Fecha Alquiler" />
                   <TableColumn fx:id="tcFechaDevolucion" prefWidth="120.0" text="Fecha Devolucion" />
                   <TableColumn fx:id="tcPrecio" prefWidth="120.0" text="Precio(€)" />

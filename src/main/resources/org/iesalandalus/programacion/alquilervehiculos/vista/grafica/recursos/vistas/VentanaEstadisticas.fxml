@@ -33,7 +33,7 @@
       </GridPane>
       <HBox alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="400.0">
          <children>
-            <Button fx:id="btAceptar" mnemonicParsing="false" onAction="#aceptar" text="Aceptar">
+            <Button fx:id="btAceptar" mnemonicParsing="false" onAction="#aceptar" text="Salir">
                <HBox.margin>
                   <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
                </HBox.margin>
